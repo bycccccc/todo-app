@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务管理应用 | 前端实习项目</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✓</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部区域 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-tasks"></i>
+                    TaskMaster
+                </h1>
+                <p class="subtitle">简洁高效的任务管理工具</p>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 添加任务区域 -->
+            <section class="add-task-section">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="taskInput" 
+                        placeholder="请输入新的任务..." 
+                        autocomplete="off"
+                        maxlength="100"
+                    >
+                    <button id="addTaskBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        添加任务
+                    </button>
+                </div>
+                <div class="input-hint">
+                    <small>按下 Enter 键也可快速添加任务</small>
+                </div>
+            </section>
+
+            <!-- 任务统计 -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-list-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalTasks">0</span>
+                            <span class="stat-label">总任务数</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="pendingTasks">0</span>
+                            <span class="stat-label">待完成</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="completedTasks">0</span>
+                            <span class="stat-label">已完成</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 过滤选项 -->
+            <section class="filter-section">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">
+                        <i class="fas fa-bars"></i>
+                        全部任务
+                    </button>
+                    <button class="filter-tab" data-filter="pending">
+                        <i class="fas fa-clock"></i>
+                        未完成
+                    </button>
+                    <button class="filter-tab" data-filter="completed">
+                        <i class="fas fa-check"></i>
+                        已完成
+                    </button>
+                </div>
+                <div class="filter-actions">
+                    <button id="clearCompletedBtn" class="btn btn-secondary">
+                        <i class="fas fa-trash"></i>
+                        清除已完成
+                    </button>
+                </div>
+            </section>
+
+            <!-- 任务列表 -->
+            <section class="tasks-section">
+                <div class="tasks-container">
+                    <ul id="taskList" class="task-list">
+                        <!-- 任务项会通过JavaScript动态生成 -->
+                        <li class="empty-state">
+                            <i class="fas fa-clipboard-list"></i>
+                            <p>还没有任务，开始添加你的第一个任务吧！</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 操作提示 -->
+            <section class="tips-section">
+                <div class="tip">
+                    <i class="fas fa-lightbulb"></i>
+                    <div class="tip-content">
+                        <p><strong>使用提示：</strong></p>
+                        <ul>
+                            <li>点击任务文本前的复选框可以标记为完成/未完成</li>
+                            <li>点击任务文本可以进入编辑模式</li>
+                            <li>悬停在任务项上会显示删除按钮</li>
+                            <li>双击任务项可以快速切换完成状态</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部区域 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>前端实习项目 - 任务管理应用</p>
+                    <p class="footer-sub">使用本地存储，数据安全保存</p>
+                </div>
+                <div class="footer-links">
+                    <button id="exportBtn" class="btn btn-text">
+                        <i class="fas fa-download"></i>
+                        导出数据
+                    </button>
+                    <button id="importBtn" class="btn btn-text">
+                        <i class="fas fa-upload"></i>
+                        导入数据
+                    </button>
+                    <button id="resetBtn" class="btn btn-text">
+                        <i class="fas fa-redo"></i>
+                        重置数据
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 导入/导出模态框 -->
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">数据操作</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="exportContent" class="modal-section">
+                    <p>复制以下JSON数据以保存：</p>
+                    <textarea id="jsonData" readonly></textarea>
+                    <button id="copyBtn" class="btn btn-primary">
+                        <i class="fas fa-copy"></i>
+                        复制到剪贴板
+                    </button>
+                </div>
+                <div id="importContent" class="modal-section">
+                    <p>粘贴JSON数据以导入：</p>
+                    <textarea id="importData" placeholder='[{"id": "1", "text": "示例任务", "completed": false}]'></textarea>
+                    <button id="importConfirmBtn" class="btn btn-primary">
+                        <i class="fas fa-check"></i>
+                        确认导入
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
