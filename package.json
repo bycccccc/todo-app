@@ -1,0 +1,12 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "Frontend Task Manager App",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["todo", "task-manager", "frontend"],
+  "author": "bycccccc",
+  "license": "MIT"
+}
